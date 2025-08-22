@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 void	swap(char *a, char *b)
 {
@@ -20,25 +21,31 @@ void	swap(char *a, char *b)
 	*b = t;
 }
 
-int	next_perm(char *s, int len)
+void	print_str(const char *s)
 {
-	int	i = len - 2;
-	while (i >= 0 && s[i] >= s[i + 1])
-		i--;
-	if (i < 0)
-		return (0);
-	int	j = len - 1;
-	while (s[j] <= s[i])
-		j--;
-	swap(&s[i], &s[j]);
-	int	start = i + 1, end = len - 1;
-	while (start < end)
+	size_t len = 0;
+
+	while (s[len])
+		len++;
+	write(1, s, len);
+	write(1, "\n", 1);
+}
+
+void	backtrack(char *s, int start, int len)
+{
+	if (start == len)
 	{
-		swap(&s[start], &s[end]);
-		start++;
-		end--;
+		print_str(s);
+		return ;
 	}
-	return (1);
+	int	i = start;	
+	while (i < len)
+	{
+		swap(&s[start], &s[i]);
+		backtrack(s, start + 1, len);
+		swap(&s[start], &s[i]);
+		i++;
+	}
 }
 
 int	main(int argc, char **argv)
@@ -46,7 +53,7 @@ int	main(int argc, char **argv)
 	if (argc != 2)
 		return (1);
 	char	*str = argv[1];
-	int	len = 0, i = 0;
+	int	len = 0, i = 0, j;
 	while (str[len])
 		len++;
 	char	*s = malloc(len + 1);
@@ -60,7 +67,7 @@ int	main(int argc, char **argv)
 	i = 0;
 	while (i < len - 1)
 	{
-		int	j = i + 1;
+		j = i + 1;
 		while (j < len)
 		{
 			if (s[i] > s[j])
@@ -69,9 +76,7 @@ int	main(int argc, char **argv)
 		}
 		i++;
 	}
-	do {
-		puts(s);
-	} while (next_perm(s, len));
+	backtrack(s, 0, len);
 	free(s);
 	return (0);
 }
