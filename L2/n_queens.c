@@ -34,12 +34,12 @@ void	solve(int *board, int col, int n)
 	{
 		while (i < n)
 		{
-			fprintf(stdout, "%d", board[i]);
+			printf("%d", board[i]);
 			if (i < n - 1)
-				fprintf(stdout, " ");
+				printf(" ");
 			i++;
 		}
-		fprintf(stdout, "\n");
+		printf("\n");
 		return ;
 	}
 	int	row = 0;
