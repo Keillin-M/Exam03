@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmaeda <kmaeda@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/19 11:53:16 by kmaeda            #+#    #+#             */
-/*   Updated: 2025/08/19 14:34:44 by kmaeda           ###   ########.fr       */
+/*   Created: 2025/08/18 15:19:08 by kmaeda            #+#    #+#             */
+/*   Updated: 2025/08/18 15:47:58 by kmaeda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
 #include <fcntl.h>
 
 #ifndef BUFFER_SIZE
@@ -21,9 +21,9 @@
 
 char	*get_next_line(int fd)
 {
-	static	buffer[BUFFER_SIZE];
+	static char	buffer[BUFFER_SIZE];
 	static int	buffer_pos = 0;
-	static	int	bytes_read = 0;
+	static int	bytes_read = 0;
 	char	*line = NULL;
 	int	line_len = 0;
 	char	*temp;
@@ -64,4 +64,17 @@ char	*get_next_line(int fd)
 	if (line_len == 0)
 		return (free(line), NULL);
 	return (line);
+}
+
+int main()
+{
+	int fd = open("in", O_RDONLY);
+	char *line;
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		printf("%s", line);
+		free(line);
+	}
+	close(fd);
+	return (0);
 }
